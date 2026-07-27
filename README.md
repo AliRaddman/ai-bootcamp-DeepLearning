@@ -52,6 +52,7 @@ ai-bootcamp-DeepLearning/
 │   │
 │   ├── cv/
 │   │   ├── README.md
+|   |   ├── 00_cv_download_dataset.ipynb
 │   │   ├── 01_cv_data_preparation.ipynb
 │   │   ├── 02_cv_frame_pipeline.ipynb
 │   │   ├── 03_cv_baseline_model.ipynb
@@ -260,8 +261,8 @@ predictions/
 - [x] تعیین برنامه زمانی
 - [x] مشخص‌کردن وابستگی تسک‌ها
 - [x] انتخاب Google Colab به‌عنوان محیط اجرا
-- [ ] ساخت پوشه مشترک Google Drive
-- [ ] اشتراک‌گذاری پوشه Drive با اعضای تیم
+- [x] ساخت پوشه مشترک Google Drive
+- [x] اشتراک‌گذاری پوشه Drive با اعضای تیم
 
 ### مراحل اصلی
 
