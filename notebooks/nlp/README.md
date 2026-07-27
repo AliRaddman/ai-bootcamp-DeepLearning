@@ -4,6 +4,8 @@
 
 هدف این بخش، تحلیل داده‌های نظرات و طراحی مدلی برای پیش‌بینی امتیاز هر نظر از ۱ تا ۵ است.
 
+کدهای این بخش در Google Colab اجرا می‌شوند.
+
 متغیر هدف:
 
 ```text
@@ -17,6 +19,60 @@ reviewText
 ```
 
 در صورت ارائه دلیل مناسب، اطلاعات دیگری مانند `summary` نیز می‌توانند مورد استفاده قرار گیرند.
+
+---
+
+## محیط اجرا
+
+Notebookهای این بخش در Google Colab اجرا می‌شوند.
+
+Google Colab برای موارد زیر استفاده می‌شود:
+
+- پاک‌سازی و تحلیل داده‌ها
+- رسم نمودارها و Word Cloud
+- آموزش مدل پایه
+- استفاده از GPU برای آموزش مدل عمیق
+- Fine-tune کردن مدل‌های پیش‌آموخته
+- پیش‌بینی داده Test
+- ساخت فایل Submission
+
+داده‌ها، مدل‌ها و خروجی‌های حجیم در Google Drive ذخیره می‌شوند.
+
+ساختار پیشنهادی Drive برای بخش NLP:
+
+```text
+AI_Project2/
+├── data/
+│   └── nlp/
+├── models/
+│   └── nlp/
+└── outputs/
+    └── nlp/
+```
+
+---
+
+## اتصال Google Drive
+
+در ابتدای Notebookهایی که به داده‌ها یا خروجی‌ها نیاز دارند، Drive متصل شود:
+
+```python
+from google.colab import drive
+
+drive.mount("/content/drive")
+```
+
+مسیرهای پیشنهادی:
+
+```python
+PROJECT_ROOT = "/content/drive/MyDrive/AI_Project2"
+
+NLP_DATA_DIR = f"{PROJECT_ROOT}/data/nlp"
+NLP_MODEL_DIR = f"{PROJECT_ROOT}/models/nlp"
+NLP_OUTPUT_DIR = f"{PROJECT_ROOT}/outputs/nlp"
+```
+
+در صورت متفاوت‌بودن محل پوشه مشترک، مسیرها باید اصلاح شوند.
 
 ---
 
@@ -71,6 +127,7 @@ reviewText
 - عباس برای شروع مدل عمیق لازم نیست منتظر تکمیل مدل پایه علی بماند.
 - مدل پایه و مدل عمیق باید روی یک Split مشترک ارزیابی شوند.
 - نتیجه مدل پایه برای مقایسه نهایی مورد استفاده قرار می‌گیرد.
+- فایل‌های مشترک باید در Google Drive ذخیره شوند.
 
 ---
 
@@ -83,9 +140,9 @@ reviewText
 خروجی مورد انتظار:
 
 ```text
-nlp_train_clean.csv
-nlp_validation_clean.csv
-nlp_test_clean.csv
+outputs/nlp/nlp_train_clean.csv
+outputs/nlp/nlp_validation_clean.csv
+outputs/nlp/nlp_test_clean.csv
 ```
 
 وظایف اصلی:
@@ -115,6 +172,12 @@ nlp_test_clean.csv
 - میانگین امتیاز برندهای منتخب
 - نمودارها و تفسیر نتایج
 
+خروجی‌های قابل استفاده در Notebook نهایی در مسیر زیر ذخیره شوند:
+
+```text
+outputs/nlp/
+```
+
 ---
 
 ### مرحله سوم: مدل پایه تحلیل احساس
@@ -132,7 +195,7 @@ TF-IDF + Logistic Regression
 خروجی مورد انتظار:
 
 ```text
-baseline_nlp_validation_predictions.csv
+outputs/nlp/baseline_nlp_validation_predictions.csv
 ```
 
 محتوای پیشنهادی:
@@ -152,8 +215,9 @@ predicted_label
 خروجی مورد انتظار:
 
 ```text
-deep_nlp_validation_predictions.csv
-final/q2_submission.csv
+models/nlp/deep_sentiment_model/
+outputs/nlp/deep_nlp_validation_predictions.csv
+outputs/nlp/q2_submission.csv
 ```
 
 وظایف اصلی:
@@ -196,10 +260,11 @@ guarantee
 
 مسئول اصلی: فاطمه
 
-- بارگذاری داده‌ها
+- بارگذاری داده‌ها در Google Colab
 - پاک‌سازی اولیه
 - انجام EDA
 - ساخت Train/Validation Split مشترک
+- ذخیره داده آماده در Google Drive
 - تحویل داده آماده به اعضای تیم
 
 ---
@@ -226,7 +291,8 @@ guarantee
 
 مسئول اصلی مدل: عباس
 
-- آموزش مدل عمیق
+- آموزش مدل عمیق در Google Colab
+- ذخیره Checkpoint در Google Drive
 - ارزیابی روی Validation
 - مقایسه اولیه با Baseline
 - تکمیل تحلیل‌های دیگر اعضا
@@ -241,7 +307,7 @@ guarantee
 - انتخاب مدل نهایی
 - پیش‌بینی داده‌های Test
 - ساخت Submission
-- اجرای کامل Notebookها
+- اجرای کامل Notebookها در Google Colab
 - تکمیل مستندات
 - ساخت Notebook نهایی NLP
 
@@ -309,8 +375,24 @@ predicted
 - داده Test نباید در آموزش یا انتخاب مدل استفاده شود.
 - معیار اصلی مقایسه Micro F1 است.
 - Predictionهای Validation باید ذخیره شوند.
+- مدل‌ها و داده‌های حجیم نباید در GitHub قرار بگیرند.
+- فایل‌های حجیم باید در Google Drive ذخیره شوند.
 - فایل Submission پیش از تحویل بررسی شود.
+- Notebook باید پس از Restart Runtime قابل اجرا باشد.
+- نصب کتابخانه‌های اضافی باید داخل Notebook نوشته شود.
+- مسیرهای Drive باید در ابتدای Notebook قابل تنظیم باشند.
 - Notebookها باید از ابتدا بدون خطا اجرا شوند.
+
+---
+
+## نکات مربوط به Google Colab
+
+- فایل‌های ذخیره‌شده در `/content` موقتی هستند.
+- مدل‌ها، داده‌های پردازش‌شده و Predictionها باید در Google Drive ذخیره شوند.
+- Runtime ممکن است قطع شود؛ بنابراین Checkpointها باید در طول آموزش ذخیره شوند.
+- برای مدل عمیق، GPU باید فعال باشد.
+- پیش از اجرای کامل، Pipeline روی نمونه کوچکی از داده تست شود.
+- Notebook نباید به مسیر شخصی و ثابت یک عضو وابسته باشد.
 
 ---
 
@@ -335,6 +417,7 @@ predicted
 
 ## وضعیت بخش NLP
 
+- [ ] اتصال Google Colab به Drive
 - [ ] بارگذاری داده‌ها
 - [ ] پاک‌سازی داده‌ها
 - [ ] انجام EDA
