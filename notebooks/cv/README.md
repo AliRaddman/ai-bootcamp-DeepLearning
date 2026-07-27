@@ -363,7 +363,9 @@ final/q1_collision_detection.ipynb
 
 ## وضعیت بخش CV
 
-- [ ] اتصال Google Colab به Drive
+- [x] اتصال Google Colab به Drive
+- [x] دانلود دیتاست Nexar
+- [x] انتقال کامل دیتاست به Google Drive
 - [ ] بررسی دیتاست
 - [ ] ساخت برچسب‌ها
 - [ ] ساخت Train/Validation Split
