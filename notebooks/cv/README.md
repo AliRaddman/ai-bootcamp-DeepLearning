@@ -4,6 +4,8 @@
 
 هدف این بخش، طراحی یک سیستم دسته‌بندی دودویی است که با دریافت یک ویدئوی کوتاه تشخیص دهد آیا در آن تصادف رخ داده است یا خیر.
 
+کدهای این بخش در Google Colab اجرا می‌شوند.
+
 ---
 
 ## مجموعه‌داده
@@ -16,6 +18,59 @@
 
 - وجود مقدار در `time_of_event`: تصادف
 - مقدار خالی یا `NaN`: عدم وقوع تصادف
+
+---
+
+## محیط اجرا
+
+Notebookهای این بخش در Google Colab اجرا می‌شوند.
+
+Google Colab برای موارد زیر استفاده می‌شود:
+
+- بارگذاری و پردازش ویدئوها
+- استخراج فریم
+- ساخت Dataset و DataLoader
+- استفاده از GPU
+- آموزش مدل‌های تصویری و زمانی
+- ارزیابی مدل‌ها
+
+فایل‌های حجیم در Google Drive ذخیره می‌شوند.
+
+ساختار پیشنهادی Drive برای بخش CV:
+
+```text
+AI_Project2/
+├── data/
+│   └── cv/
+├── models/
+│   └── cv/
+└── outputs/
+    └── cv/
+```
+
+---
+
+## اتصال Google Drive
+
+در ابتدای Notebookهایی که به داده یا فایل خروجی نیاز دارند، Drive متصل شود:
+
+```python
+from google.colab import drive
+
+drive.mount("/content/drive")
+```
+
+مسیرهای پیشنهادی:
+
+```python
+PROJECT_ROOT = "/content/drive/MyDrive/AI_Project2"
+
+CV_DATA_DIR = f"{PROJECT_ROOT}/data/cv"
+CV_MODEL_DIR = f"{PROJECT_ROOT}/models/cv"
+CV_OUTPUT_DIR = f"{PROJECT_ROOT}/outputs/cv"
+```
+
+در صورت متفاوت‌بودن محل پوشه مشترک، مسیرها باید اصلاح شوند.
 
 ---
 
@@ -55,6 +110,7 @@
 - فاطمه برای شروع مدل زمانی لازم نیست منتظر تکمیل مدل پایه بماند.
 - علی می‌تواند کدهای ارزیابی را پیش از آماده‌شدن مدل‌ها ایجاد کند.
 - ارزیابی نهایی به Prediction هر دو مدل وابسته است.
+- فایل‌های واسط باید در پوشه مشترک Google Drive ذخیره شوند.
 
 ---
 
@@ -67,8 +123,8 @@
 خروجی مورد انتظار:
 
 ```text
-train_split.csv
-validation_split.csv
+outputs/cv/train_split.csv
+outputs/cv/validation_split.csv
 ```
 
 ستون‌های پیشنهادی:
@@ -99,6 +155,10 @@ label
 Batch × Frames × Channels × Height × Width
 ```
 
+فریم‌های استخراج‌شده فقط در صورتی در Drive ذخیره شوند که ذخیره آن‌ها از نظر زمان و حجم منطقی باشد.
+
+در غیر این صورت، فریم‌ها هنگام اجرای DataLoader از ویدئو استخراج شوند.
+
 ---
 
 ### مرحله سوم: مدل پایه
@@ -108,8 +168,8 @@ Batch × Frames × Channels × Height × Width
 خروجی مورد انتظار:
 
 ```text
-baseline_model.pth
-baseline_validation_predictions.csv
+models/cv/baseline_model.pth
+outputs/cv/baseline_validation_predictions.csv
 ```
 
 ساختار پیشنهادی فایل Prediction:
@@ -130,8 +190,8 @@ predicted_probability
 خروجی مورد انتظار:
 
 ```text
-temporal_model.pth
-temporal_validation_predictions.csv
+models/cv/temporal_model.pth
+outputs/cv/temporal_validation_predictions.csv
 ```
 
 ساختار پیشنهادی فایل Prediction:
@@ -161,6 +221,12 @@ predicted_probability
 - تحلیل False Negative
 - انتخاب مدل نهایی
 
+خروجی‌های ارزیابی در مسیر زیر ذخیره شوند:
+
+```text
+outputs/cv/
+```
+
 ---
 
 ## برنامه زمانی بخش CV
@@ -173,6 +239,7 @@ predicted_probability
 - ساخت برچسب‌ها
 - بررسی توزیع کلاس‌ها
 - ساخت Train و Validation Split
+- ذخیره Splitها در Google Drive
 - تحویل Split به عباس
 
 کارهای موازی:
@@ -191,7 +258,7 @@ predicted_probability
 - استخراج فریم
 - ساخت Dataset
 - ساخت DataLoader
-- تست Pipeline
+- تست Pipeline در Google Colab
 - تحویل Pipeline به بنیامین و فاطمه
 
 ---
@@ -209,6 +276,7 @@ predicted_probability
 - شروع آموزش مدل زمانی
 - ثبت نتایج اولیه
 - رفع مشکلات Pipeline
+- ذخیره Checkpointها در Google Drive
 
 ---
 
@@ -234,7 +302,7 @@ predicted_probability
 
 مسئول: تمام اعضا
 
-- اجرای کامل Notebookها
+- اجرای کامل Notebookها در Google Colab
 - رفع باگ
 - تکمیل توضیحات
 - بررسی خروجی‌ها
@@ -256,10 +324,24 @@ final/q1_collision_detection.ipynb
 - تعداد فریم، اندازه تصاویر و روش نرمال‌سازی باید ثبت شوند.
 - بهترین مدل باید بر اساس عملکرد Validation ذخیره شود.
 - Predictionها باید برای ارزیابی نهایی ذخیره شوند.
-- فایل‌های مدل نباید در GitHub قرار بگیرند.
-- مسیر فایل‌های حجیم باید در Notebook قابل تنظیم باشد.
+- مدل‌ها و ویدئوها نباید در GitHub قرار بگیرند.
+- فایل‌های حجیم باید در Google Drive ذخیره شوند.
+- مسیرهای Drive باید در ابتدای Notebook قابل تنظیم باشند.
+- Notebook باید پس از Restart Runtime نیز قابل اجرا باشد.
+- نصب کتابخانه‌های اضافی باید داخل Notebook نوشته شود.
 - هر Notebook باید از ابتدا بدون خطا اجرا شود.
 - هر تصمیم مهم باید دلیل مشخص داشته باشد.
+
+---
+
+## نکات مربوط به Google Colab
+
+- فایل‌های ذخیره‌شده در `/content` موقتی هستند.
+- مدل‌ها و خروجی‌های مهم باید مستقیماً در Google Drive ذخیره شوند.
+- Runtime ممکن است قطع شود؛ بنابراین بهترین Checkpoint باید در طول آموزش ذخیره شود.
+- نوع Runtime باید پیش از آموزش بررسی شود.
+- برای آموزش مدل‌ها از GPU استفاده شود.
+- کد نباید به مسیر شخصی و ثابت یک عضو وابسته باشد.
 
 ---
 
@@ -281,6 +363,7 @@ final/q1_collision_detection.ipynb
 
 ## وضعیت بخش CV
 
+- [ ] اتصال Google Colab به Drive
 - [ ] بررسی دیتاست
 - [ ] ساخت برچسب‌ها
 - [ ] ساخت Train/Validation Split
