@@ -136,6 +136,7 @@ label
 ```
 
 ---
+https://colab.research.google.com/drive/1vaPcHEUpg3PtFZhGHuzJIFgbfmkG5aPG#scrollTo=OaGgWoDx8Roj
 
 ### مرحله دوم: استخراج فریم و DataLoader
 
