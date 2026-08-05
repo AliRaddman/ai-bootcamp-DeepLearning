@@ -144,7 +144,9 @@ outputs/nlp/nlp_train_clean.csv
 outputs/nlp/nlp_validation_clean.csv
 outputs/nlp/nlp_test_clean.csv
 ```
-
+https://drive.google.com/file/d/1KSIl4ffAR6uUhKHHFEx7an9NHApj8jDq/view?usp=share_link
+https://drive.google.com/file/d/1pqL4Fzyg94vYNJ5ln_GqnIFS_z_8A_nX/view?usp=share_link
+https://drive.google.com/file/d/1Lmu0TFL2uvd9kiS4vxWtpjgmlr98e3bp/view?usp=share_link
 وظایف اصلی:
 
 - بارگذاری داده‌های Train و Test
